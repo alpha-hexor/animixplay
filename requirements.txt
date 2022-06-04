@@ -1,0 +1,9 @@
+PyInquirer
+prompt_toolkit==1.0.14
+regex
+beautifulsoup4
+httpx
+coloroma
+yarl
+lxml
+jsbeautifier
