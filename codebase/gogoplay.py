@@ -12,7 +12,7 @@ req = HttpClient()
 
 
 #some global shit
-base_url = "https://animixplay.to/"
+base_url = "https://animixplay.to"
 s=b'37911490979715163134003223491201'
 s_2 = b'54674138327930866480207815084989'
 iv= b'3134003223491201'
@@ -21,7 +21,7 @@ iv= b'3134003223491201'
 
 def extract_episode_info(anime_id):
     r=req.get(
-        f"{base_url}v1/{anime_id}"
+        f"{base_url}{anime_id}"
     )
     soup = bs(r.text,"html.parser")
     data = json.loads(soup.select("#epslistplace")[0].text)
@@ -63,6 +63,10 @@ def extract_final_links(from_al,link):
     
     p_url = yarl.URL(link)
     
+    if p_url.host != "goload.pro":
+        print("[*]Not a goload link,try out other provider")
+        exit()
+        
     
     
     ajax_url = "https://{}/encrypt-ajax.php".format(p_url.host)

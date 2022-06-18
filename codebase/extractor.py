@@ -1,4 +1,4 @@
-#list of extractors for allanime
+#list of extractors for allanime and animixplay
 from .httpclient import HttpClient
 from bs4 import BeautifulSoup as bs
 import re
@@ -8,6 +8,11 @@ import yarl
 from html import unescape
 import jsbeautifier
 from colorama import Fore, Style
+import base64
+import regex
+from .ui import ask_quality
+from .m3u8 import *
+
 
 #global shit goes here
 req = HttpClient()
@@ -16,6 +21,19 @@ strem_sb_payload = "76594275494f6a424d6852687c7c{}7c7c724f6c6453373351356f64457c
 streamsb_id_regex = r"/e/([^?#&/.]+)"
 ok_ru_regex = r'data-options="([^"]*)"'
 player_src_regex = r"player\.src\(([^)]+)\)"
+player_matcher = regex.compile(r"player\.html[?#](.+?)#")
+base64_matcher = regex.compile(r"#(aHR0[^#]+)")
+embed_video_matcher = regex.compile(r'iframesrc="(.+?)"')
+dailymotion_quality_regex = r'NAME="(\d+?)"'
+dailymotin_stream_regex = r',PROGRESSIVE-URI="(.+?)"'
+
+
+#exchangeable anime providers
+url_alias = {
+    "bestanimescdn": "bestwea5.stream/anime3",
+    "anicdn.stream": "gogocdn.club",
+    "ssload.info": "gogocdn.club",
+}
 
 #color shit
 red = lambda a: f"{Fore.RED}{a}{Style.RESET_ALL}"
@@ -112,3 +130,70 @@ def streamlare(link):
         
     ).json()
     return r.get("result",{}).get("Original",{}).get("url")
+
+#daily motion link provider
+def dailymotion(link):
+    dailymotion_id = re.findall(r"/embed/video/([^&?/]+)", link)[0]
+    r=req.get(
+        f"https://www.dailymotion.com/player/metadata/video/{dailymotion_id}"
+    ).json()
+    
+    k = [stream.get("url") for _,streams in r.get("qualities", {}).items() for stream in streams][0]
+    
+    x = req.get(k,headers={"Referer": "https://www.dailymotion.com/"}).text
+    
+    qualities = re.findall(dailymotion_quality_regex, x)
+    links = re.findall(dailymotin_stream_regex, x)
+    
+    quality = ask_quality(qualities)
+    #retunr correct link
+    
+    return links[qualities.index(quality)]    
+
+#animixplay link
+def decode_from_base64(link):
+    
+    on_url = player_matcher.search(str(link)) or base64_matcher.search(str(link))
+    
+    if not on_url:
+        return None
+    else:
+        p = base64.b64decode(on_url.group(1)).decode()
+        #print(p)
+        for key, value in url_alias.items():
+            if key in p:
+                p = p.replace(key, value)
+        try:
+            
+            qualities,links = get_m3u8_quality(p)
+            quality = ask_quality(qualities)
+            #print(links[qualities.index(quality)])
+            return links[qualities.index(quality)] 
+        except:
+            return p
+            
+def animixplay_link(link):
+    gogo_id = yarl.URL(link).query.get("id")
+    l = "https://animixplay.to/api/live"+base64.b64encode(
+        "{}LTXs3GrU8we9O{}".format(
+            gogo_id,
+            
+            base64.b64encode(gogo_id.encode()).decode()
+        ).encode()
+        ).decode()
+    
+    
+    x = req.get(l)
+    while x.status_code == 429:
+        time.sleep(2.5)
+        x = req.get(l)
+    if x.status_code == 403:
+        return None
+    on_site = embed_video_matcher.search(x.text)
+    if on_site:
+        return decode_from_base64(on_site.group(1))
+    else :return decode_from_base64(x.url)
+        
+    
+    
+    

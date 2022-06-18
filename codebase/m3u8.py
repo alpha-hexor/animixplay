@@ -5,6 +5,7 @@ python code to parse m3u8 quality
 from .httpclient import HttpClient
 import regex
 import re
+import yarl
 
 requests = HttpClient()
 
@@ -19,7 +20,7 @@ def fix_link(link):
 
 
 def get_m3u8_quality(link):
-    
+    #print("i got called")
     links = []
     qualities = []
     
@@ -28,18 +29,22 @@ def get_m3u8_quality(link):
     r=requests.get(link)
     
     
+    
     for i in start_regex.finditer(r.text):
         res_line,l = i.groups()
         
         #construct the quality 
         qualities.append(str(res_regex.search(res_line).group(1))+"p")
-        
+        #print(qualities)
         #construct link
-        link=partial_link+l.strip()
-        if len(re.findall("https://",link)) > 1:
-                links.append(fix_link(link))
+        if yarl.URL(str(l.strip())).is_absolute():
+            links.append(str(l.strip()))
         else:
-            links.append(link)
+            link=partial_link+l.strip()
+            if len(re.findall("https://",link)) > 1:
+                    links.append(fix_link(link))
+            else:
+                links.append(link)
     
     return qualities,links
 
