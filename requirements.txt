@@ -7,7 +7,5 @@ colorama
 yarl
 lxml
 jsbeautifier
-httpx
-bs4
 pycryptodome
 pycryptodomex
