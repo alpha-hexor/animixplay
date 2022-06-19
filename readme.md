@@ -12,7 +12,19 @@ This is a python tool that scrapes animixplay links directly play it in mpv vide
 ***
 ## Installation
 
-``pip install -r requirements.txt``
+```pip install -r requirements.txt```
+
+In the file 
+
+```$HOME/local/lib/python3.10/site-packages/prompt_toolkit/styles/from_dict.py```
+
+Change the line 8
+
+```from collections import Mapping```
+
+to
+
+```from collections.abc import Mapping```
 ***
 
 ## Usage
