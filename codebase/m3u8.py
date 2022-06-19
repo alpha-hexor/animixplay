@@ -2,7 +2,7 @@
 python code to parse m3u8 quality
 '''
 
-from tkinter.messagebox import NO
+#from tkinter.messagebox import NO
 from .httpclient import HttpClient
 import regex
 import re
