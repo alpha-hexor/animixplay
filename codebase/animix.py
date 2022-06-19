@@ -10,7 +10,6 @@ from colorama import Fore, Style
 #some global shit
 req = HttpClient()
 base_url = "https://animixplay.to"
-URL_REGEX = r'(?:(?:https):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+'
 
 red = lambda a: f"{Fore.RED}{a}{Style.RESET_ALL}"
     
@@ -34,18 +33,19 @@ def generate_link(link):
         return okru(l)
         
     elif yarl.URL(l).host == "goload.pro":
-        link = animixplay_link(l)
-        if not link:
+        data = animixplay_link(l)
+        if not data:
             link = extract_final_links(True,l)
-        return link
+            data = [{"stream_url":link}]
+        return data
         
     
     else:    #for adult animes
-        link =  decode_from_base64(l)
-        if not link:
+        data =  decode_from_base64(l)
+        if not data:
             print(red("[*]Seems like link is not available"))
             exit()
-        return link
+        return data
             
         
     

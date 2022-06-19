@@ -148,7 +148,7 @@ def dailymotion(link):
     quality = ask_quality(qualities)
     #retunr correct link
     
-    return links[qualities.index(quality)]    
+    return [{"stream_url":links[qualities.index(quality)]}]    
 
 #animixplay link
 def decode_from_base64(link):
@@ -163,14 +163,14 @@ def decode_from_base64(link):
         for key, value in url_alias.items():
             if key in p:
                 p = p.replace(key, value)
-        try:
-            
-            qualities,links = get_m3u8_quality(p)
+        
+        if "m3u8" in p:
+            audio,qualities,links = get_m3u8_quality(p)
             quality = ask_quality(qualities)
-            #print(links[qualities.index(quality)])
-            return links[qualities.index(quality)] 
-        except:
-            return p
+                #print(links[qualities.index(quality)])
+            return [{"stream_url":links[qualities.index(quality)],"audio":audio}] 
+        else:
+            return [{"stream_url":p}]
             
 def animixplay_link(link):
     gogo_id = yarl.URL(link).query.get("id")

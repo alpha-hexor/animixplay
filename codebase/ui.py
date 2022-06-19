@@ -1,6 +1,7 @@
 #code for user interface
 from __future__ import print_function, unicode_literals
 from PyInquirer import style_from_dict, Token, prompt, Separator
+import os
 
 
 '''
@@ -16,6 +17,9 @@ style = style_from_dict({
     Token.Answer: '#f44336 bold',
     Token.Question: '#673ab7 bold',
 })
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 #ui to ask provider
 def ask_provider():
@@ -58,7 +62,7 @@ def ask_anime_name(x):
 
 #ui to ask quality
 def ask_quality(qualities):
-
+    clear()
     quality_question = [
         {
             'type' : 'list',

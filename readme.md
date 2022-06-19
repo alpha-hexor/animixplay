@@ -5,7 +5,7 @@ This is a python tool that scrapes animixplay links directly play it in mpv vide
 ***
 
 ## Requirements
-1. **python=3.6**
+1. **python>=3.6**
 
 2. **mpv(should be in ``PATH`` for windows)**
 

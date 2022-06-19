@@ -2,6 +2,7 @@
 python code to parse m3u8 quality
 '''
 
+from tkinter.messagebox import NO
 from .httpclient import HttpClient
 import regex
 import re
@@ -45,7 +46,13 @@ def get_m3u8_quality(link):
                     links.append(fix_link(link))
             else:
                 links.append(link)
-    
-    return qualities,links
+    if "manifest.prod" in yarl.URL(link).host:
+        print("[*]Audio got called")
+        audio = re.findall(r'URI="(.*?)"',r.text)[0]
+    else:
+        print("[*]Audio did not get called")
+        audio = None
+        
+    return audio,qualities,links
 
     

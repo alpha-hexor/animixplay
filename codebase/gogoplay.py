@@ -94,7 +94,7 @@ def extract_final_links(from_al,link):
     if from_al:
         return  j['source'][0]['file']
     else:
-        qualities,links = get_m3u8_quality(j['source'][0]['file'])
+        audio,qualities,links = get_m3u8_quality(j['source'][0]['file'])
         
     
-        return qualities,links
+        return audio,qualities,links
