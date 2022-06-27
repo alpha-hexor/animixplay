@@ -3,22 +3,9 @@ from codebase.gogoplay import *
 from codebase.animix import *
 from codebase.search import *
 from codebase.stream import *
-import os
-from colorama import Fore, Style
 
-
-#soem global shit
-lmagenta = lambda a: f"{Fore.LIGHTMAGENTA_EX}{a}{Style.RESET_ALL}"
-
+#some global shit
 provider = ask_provider()
-
-
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-
-
-
 clear()
 query = input(lmagenta("[*]Enter the anime name: "))
 animes = search(query)
@@ -26,7 +13,9 @@ x = [i.replace("/v1/","") for i in animes]
 
 anime_name = ask_anime_name(x)
 anime_to_watch = animes[x.index(anime_name)]
-#print(anime_to_watch)
+
+
+
 
 if provider == "gogoplay":
     from_al = False
@@ -52,9 +41,10 @@ else:
     
     links = data[str(int(p)-1)]
     
-    data = generate_link(links)[0]
+    streaming_data = generate_link(links)[0]
     
-    data["name"] = f"{anime_name}_{p}"
+    streaming_data["name"] = f"{anime_name}_{p}"
     
-    play_mpv([data])
+    play_mpv([streaming_data])
+    
     

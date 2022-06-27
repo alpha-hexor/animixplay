@@ -10,7 +10,7 @@ import jsbeautifier
 from colorama import Fore, Style
 import base64
 import regex
-from .ui import ask_quality
+from .ui import *
 from .m3u8 import *
 
 
@@ -36,7 +36,7 @@ url_alias = {
 }
 
 #color shit
-red = lambda a: f"{Fore.RED}{a}{Style.RESET_ALL}"
+
 
 #doodstream
 def dood(link):

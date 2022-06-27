@@ -24,4 +24,3 @@ def play_mpv(data):
     mpv = subprocess.Popen(args)
     mpv.wait()
     mpv.kill()
-    

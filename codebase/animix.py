@@ -1,9 +1,9 @@
 from .httpclient import HttpClient
-from bs4 import BeautifulSoup as bs
 from .extractor import *
 import yarl
 from .gogoplay import extract_final_links
 from colorama import Fore, Style
+from .ui import *
 
 
 
@@ -11,7 +11,7 @@ from colorama import Fore, Style
 req = HttpClient()
 base_url = "https://animixplay.to"
 
-red = lambda a: f"{Fore.RED}{a}{Style.RESET_ALL}"
+
     
 def generate_link(link):
     '''

@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 from PyInquirer import style_from_dict, Token, prompt, Separator
 import os
-
+from colorama import Fore, Style
 
 '''
 start of UI
@@ -73,3 +73,7 @@ def ask_quality(qualities):
     ]
     answers = prompt(quality_question,style=style)
     return answers["quality"]
+
+#color print
+lmagenta = lambda a: f"{Fore.LIGHTMAGENTA_EX}{a}{Style.RESET_ALL}"
+red = lambda a: f"{Fore.RED}{a}{Style.RESET_ALL}"
