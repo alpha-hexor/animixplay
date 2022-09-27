@@ -32,7 +32,7 @@ def generate_link(link):
     elif yarl.URL(l).host == "ok.ru":
         return okru(l)
         
-    elif yarl.URL(l).host == "goload.pro":
+    elif yarl.URL(l).host == "goload.pro" or yarl.URL(l).host == "gogohd.net":
         data = animixplay_link(l)
         if not data:
             link = extract_final_links(True,l)
