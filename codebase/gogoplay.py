@@ -63,12 +63,6 @@ def extract_final_links(from_al,link):
     
     p_url = yarl.URL(link)
     
-    if p_url.host != "goload.pro":
-        print("[*]Not a goload link,try out other provider")
-        exit()
-        
-    
-    
     ajax_url = "https://{}/encrypt-ajax.php".format(p_url.host)
 
     encrypted_ajax = base64.b64encode(

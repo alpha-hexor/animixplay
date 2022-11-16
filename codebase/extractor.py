@@ -171,16 +171,15 @@ def decode_from_base64(link):
             return [{"stream_url":links[qualities.index(quality)],"audio":audio}] 
         else:
             return [{"stream_url":p}]
+
+def fix_id(id):
+    temp_id = id[:-1] if id[-1] == "=" else id
+    return (temp_id[:-1] + chr(ord(temp_id[-1])+1))
             
 def animixplay_link(link):
     gogo_id = yarl.URL(link).query.get("id")
-    l = "https://animixplay.to/api/live"+base64.b64encode(
-        "{}LTXs3GrU8we9O{}".format(
-            gogo_id,
-            
-            base64.b64encode(gogo_id.encode()).decode()
-        ).encode()
-        ).decode()
+
+    l = f"https://animixplay.to/api/cW9{fix_id(base64.b64encode(gogo_id.encode()).decode())}MVFhzM0dyVTh3ZTlP{base64.b64encode(base64.b64encode(gogo_id.encode())).decode()}"
     
     
     x = req.get(l)
